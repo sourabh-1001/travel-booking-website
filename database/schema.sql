@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS tours (
   id INT AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
+  description TEXT,
   slug VARCHAR(255) UNIQUE,
   destination VARCHAR(120) NOT NULL,
   category VARCHAR(120) NOT NULL,
@@ -60,10 +61,12 @@ CREATE TABLE IF NOT EXISTS bookings (
   tour_id INT NULL,
   customer_name VARCHAR(120) NOT NULL,
   customer_email VARCHAR(190) NOT NULL,
+  phone VARCHAR(30) NULL,
   tour_name VARCHAR(255) NOT NULL,
   guests INT NOT NULL,
   travel_date DATE,
   status ENUM('pending','confirmed','cancelled') DEFAULT 'pending',
+  price DECIMAL(10,2) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE SET NULL,
   INDEX idx_bookings_email (customer_email)
@@ -79,7 +82,12 @@ CREATE TABLE IF NOT EXISTS inquiries (
 
 CREATE TABLE IF NOT EXISTS languages (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  code VARCHAR(10) UNIQUE NOT NULL,
-  name VARCHAR(60) NOT NULL,
-  enabled TINYINT(1) DEFAULT 1
+  code VARCHAR(10) NULL,
+  name VARCHAR(60) NULL,
+  enabled TINYINT(1) DEFAULT 1,
+  lang_code VARCHAR(10) NOT NULL,
+  page VARCHAR(120) NOT NULL,
+  translation_key VARCHAR(190) NOT NULL,
+  `value` TEXT NOT NULL,
+  UNIQUE KEY uniq_lang_page_key (lang_code, page, translation_key)
 );
