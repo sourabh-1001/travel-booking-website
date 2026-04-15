@@ -4,12 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const price = document.getElementById('price');
   const cards = document.querySelectorAll('#tour-grid .card');
 
-  if (!destination || !duration || !price || cards.length === 0) {
-    const missing = [];
-    if (!destination) missing.push('#destination');
-    if (!duration) missing.push('#duration');
-    if (!price) missing.push('#price');
-    if (cards.length === 0) missing.push('#tour-grid .card');
+  const missing = [];
+  if (!destination) missing.push('#destination');
+  if (!duration) missing.push('#duration');
+  if (!price) missing.push('#price');
+  if (cards.length === 0) missing.push('#tour-grid .card');
+  if (missing.length > 0) {
     console.warn('Tour filters are not initialized. Missing:', missing.join(', '));
     return;
   }

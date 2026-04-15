@@ -89,6 +89,5 @@ CREATE TABLE IF NOT EXISTS languages (
   page VARCHAR(120) NOT NULL,
   translation_key VARCHAR(190) NOT NULL,
   `value` TEXT NOT NULL,
-  UNIQUE KEY uniq_lang_code (code),
   UNIQUE KEY uniq_lang_page_key (lang_code, page, translation_key)
 );

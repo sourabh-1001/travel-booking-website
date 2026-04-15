@@ -57,9 +57,19 @@ $stmt->bindValue(':email', $email, PDO::PARAM_STR);
 $stmt->bindValue(':phone', $phone, PDO::PARAM_STR);
 $stmt->bindValue(':tour', $tour, PDO::PARAM_STR);
 $stmt->bindValue(':guests', $guests, PDO::PARAM_INT);
-$stmt->bindValue(':travel_date', $travelDate ?: null, $travelDate ? PDO::PARAM_STR : PDO::PARAM_NULL);
+$travelDateValue = $travelDate ?: null;
+if ($travelDateValue === null) {
+    $stmt->bindValue(':travel_date', null, PDO::PARAM_NULL);
+} else {
+    $stmt->bindValue(':travel_date', $travelDateValue, PDO::PARAM_STR);
+}
 $stmt->bindValue(':status', 'pending', PDO::PARAM_STR);
-$stmt->bindValue(':price', $price > 0 ? $price : null, $price > 0 ? PDO::PARAM_STR : PDO::PARAM_NULL);
+$priceValue = $price > 0 ? number_format($price, 2, '.', '') : null;
+if ($priceValue === null) {
+    $stmt->bindValue(':price', null, PDO::PARAM_NULL);
+} else {
+    $stmt->bindValue(':price', $priceValue);
+}
 $stmt->execute();
 
 json_response(['message' => 'Booking request submitted']);

@@ -9,6 +9,9 @@
 ## Core Tables
 - `tours`, `reviews`, `blogs`, `bookings`, `users`, `languages`, `inquiries`
 
+### Languages table compatibility
+- The `languages` table keeps legacy metadata columns (`code`, `name`, `enabled`) and translation-store columns (`lang_code`, `page`, `translation_key`, `value`) for backward compatibility during upgrades.
+
 ## Security
 - Use strong DB passwords.
 - Restrict DB host access.
