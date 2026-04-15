@@ -1,0 +1,5 @@
+<?php
+require_once __DIR__.'/../includes/db.php';
+if($_SERVER['REQUEST_METHOD']!=='POST')json_response(['error'=>'Method not allowed'],405);
+if(isset($_POST['contact'])){$name=trim($_POST['contact_name']??'');$email=trim($_POST['contact_email']??'');$message=trim($_POST['message']??'');if($name===''||!filter_var($email,FILTER_VALIDATE_EMAIL)||$message==='')json_response(['error'=>'Invalid contact form'],422);json_response(['message'=>'Inquiry received. We will contact you soon.']);}
+$name=trim($_POST['name']??'');$email=trim($_POST['email']??'');$tour=trim($_POST['tour']??'');$travelDate=$_POST['travel_date']??'';$guests=(int)($_POST['guests']??0);if($name===''||!filter_var($email,FILTER_VALIDATE_EMAIL)||$tour===''||$guests<1)json_response(['error'=>'Invalid booking data'],422);$stmt=db()->prepare('INSERT INTO bookings (customer_name,customer_email,tour_name,guests,travel_date,status) VALUES (?,?,?,?,?,?)');$stmt->execute([$name,$email,$tour,$guests,$travelDate?:null,'pending']);json_response(['message'=>'Booking request submitted']);

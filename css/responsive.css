@@ -1,0 +1,2 @@
+@media (max-width:900px){.footer-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:720px){.nav{flex-direction:column;align-items:flex-start}.footer-grid{grid-template-columns:1fr}.social-floating{left:6px;top:auto;bottom:95px;flex-direction:row}}
