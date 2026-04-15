@@ -82,9 +82,13 @@ CREATE TABLE IF NOT EXISTS inquiries (
 
 CREATE TABLE IF NOT EXISTS languages (
   id INT AUTO_INCREMENT PRIMARY KEY,
+  code VARCHAR(10) NULL,
+  name VARCHAR(60) NULL,
+  enabled TINYINT(1) DEFAULT 1,
   lang_code VARCHAR(10) NOT NULL,
   page VARCHAR(120) NOT NULL,
   translation_key VARCHAR(190) NOT NULL,
   `value` TEXT NOT NULL,
+  UNIQUE KEY uniq_lang_code (code),
   UNIQUE KEY uniq_lang_page_key (lang_code, page, translation_key)
 );

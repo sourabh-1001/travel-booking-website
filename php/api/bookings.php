@@ -48,7 +48,18 @@ if ($tourCount < 1) {
     json_response(['error' => 'Selected tour is not available'], 422);
 }
 
-$stmt = db()->prepare('INSERT INTO bookings (customer_name, customer_email, phone, tour_name, guests, travel_date, status, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
-$stmt->execute([$name, $email, $phone, $tour, $guests, $travelDate ?: null, 'pending', $price > 0 ? $price : null]);
+$stmt = db()->prepare('
+    INSERT INTO bookings (customer_name, customer_email, phone, tour_name, guests, travel_date, status, price)
+    VALUES (:name, :email, :phone, :tour, :guests, :travel_date, :status, :price)
+');
+$stmt->bindValue(':name', $name, PDO::PARAM_STR);
+$stmt->bindValue(':email', $email, PDO::PARAM_STR);
+$stmt->bindValue(':phone', $phone, PDO::PARAM_STR);
+$stmt->bindValue(':tour', $tour, PDO::PARAM_STR);
+$stmt->bindValue(':guests', $guests, PDO::PARAM_INT);
+$stmt->bindValue(':travel_date', $travelDate ?: null, $travelDate ? PDO::PARAM_STR : PDO::PARAM_NULL);
+$stmt->bindValue(':status', 'pending', PDO::PARAM_STR);
+$stmt->bindValue(':price', $price > 0 ? $price : null, $price > 0 ? PDO::PARAM_STR : PDO::PARAM_NULL);
+$stmt->execute();
 
 json_response(['message' => 'Booking request submitted']);
