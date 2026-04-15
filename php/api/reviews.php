@@ -36,6 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true) && !is_dir($uploadDir)) {
             json_response(['error' => 'Unable to store uploaded photo'], 500);
         }
+        $htaccessFile = $uploadDir . '/.htaccess';
+        if (!file_exists($htaccessFile)) {
+            file_put_contents($htaccessFile, "Options -ExecCGI\nAddType text/plain .php .phtml .php3 .php4 .php5 .phar\n");
+        }
 
         $filename = 'review_' . bin2hex(random_bytes(16)) . '.' . $allowed[$mime];
         $destination = $uploadDir . '/' . $filename;
@@ -43,6 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             json_response(['error' => 'Unable to save uploaded photo'], 500);
         }
         $photoPath = 'uploads/reviews/' . $filename;
+    }
+
+    $duplicateStmt = db()->prepare('SELECT COUNT(*) AS total FROM reviews WHERE guest_email = ? AND review_text = ?');
+    $duplicateStmt->execute([$email, $review]);
+    if ((int) ($duplicateStmt->fetch()['total'] ?? 0) > 0) {
+        json_response(['error' => 'Duplicate review detected'], 409);
     }
 
     $stmt = db()->prepare('INSERT INTO reviews (guest_name, guest_email, rating, review_text, photo_path, approved) VALUES (?, ?, ?, ?, ?, 0)');

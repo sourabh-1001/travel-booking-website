@@ -7,6 +7,10 @@
 - `POST /php/api/blogs.php` (admin session required)
 - `POST /php/api/bookings.php`
 - `GET /php/api/settings.php`
+- `POST /php/api/auth.php?action=register`
+- `POST /php/api/auth.php?action=login`
+- `POST /php/api/auth.php?action=logout`
+- `GET /php/api/auth.php?action=profile`
 
 ## Security Notes
 - POST endpoints enforce CSRF validation via token or same-origin checks.

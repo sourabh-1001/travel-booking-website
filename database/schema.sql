@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS reviews (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE SET NULL,
   INDEX idx_reviews_approved (approved),
-  INDEX idx_reviews_email (guest_email)
+  INDEX idx_reviews_email (guest_email),
+  INDEX idx_reviews_email_tour (guest_email, tour_id)
 );
 
 CREATE TABLE IF NOT EXISTS blogs (

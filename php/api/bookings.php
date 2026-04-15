@@ -7,35 +7,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 require_post_csrf();
 
-$allowedTours = [
-    'Same-day Taj Mahal by Car',
-    'Same-day Taj Mahal by Train',
-    'Taj Mahal Sunrise/Sunset Tour',
-    'Taj Mahal Overnight Luxury',
-    'Delhi Half-day Heritage',
-    'Delhi Full-day Explorer',
-    'Delhi Spiritual & Cultural',
-    'Delhi Night Market Tour',
-    'Golden Triangle 3-Day',
-    'Golden Triangle 5-Day',
-    'Jaipur City Tour',
-    'Agra City Tour',
-    'Spiritual Tours',
-    'Cultural Village Tours',
-    'Neemrana Heritage Fort',
-    'Vrindavan & Mathura',
-    'Honeymoon Packages',
-    'Rajasthan Grand 8-Day',
-    'Jaisalmer Desert Safari',
-    'Udaipur Luxury',
-    'Jodhpur Blue City',
-    'Ranthambore Tiger Safari',
-    'Pushkar Camel Fair',
-    'Uttarakhand 5-Day',
-    'Himachal Pradesh 6-Day',
-    'Jammu & Kashmir 7-Day',
-];
-
 if (isset($_POST['contact'])) {
     $name = trim($_POST['contact_name'] ?? '');
     $email = trim($_POST['contact_email'] ?? '');
@@ -61,10 +32,16 @@ if (
     $name === '' ||
     !filter_var($email, FILTER_VALIDATE_EMAIL) ||
     $tour === '' ||
-    $guests < 1 ||
-    !in_array($tour, $allowedTours, true)
+    $guests < 1
 ) {
     json_response(['error' => 'Invalid booking data'], 422);
+}
+
+$tourExists = db()->prepare('SELECT COUNT(*) AS total FROM tours WHERE title = ?');
+$tourExists->execute([$tour]);
+$tourCount = (int) ($tourExists->fetch()['total'] ?? 0);
+if ($tourCount < 1) {
+    json_response(['error' => 'Selected tour is not available'], 422);
 }
 
 $stmt = db()->prepare('INSERT INTO bookings (customer_name, customer_email, tour_name, guests, travel_date, status) VALUES (?, ?, ?, ?, ?, ?)');
