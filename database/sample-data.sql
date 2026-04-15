@@ -54,7 +54,7 @@ INSERT INTO blogs (title, slug, category, content, featured_image, published_at)
 ('Travel Tips: Safety, Budget & Cultural Etiquette','travel-tips-safety-budget-etiquette','Travel Tips','A concise playbook for secure, respectful, and budget-aware travel across India.','https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80','2026-03-08 09:00:00'),
 ('Food Guide: Must-Try Dishes Across India','food-guide-must-try-dishes-india','Food','From Delhi street food to Rajasthani thalis, this guide helps you eat well and safely.','https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80','2026-03-12 09:00:00');
 
-INSERT INTO languages (lang_code, page, `key`, `value`) VALUES
+INSERT INTO languages (lang_code, page, translation_key, `value`) VALUES
 ('en','global','brand','Sumit Rajasthan Travel'),
 ('de','global','brand','Sumit Rajasthan Reisen'),
 ('es','global','brand','Viajes Sumit Rajasthan'),

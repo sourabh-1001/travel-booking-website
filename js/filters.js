@@ -4,7 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const price = document.getElementById('price');
   const cards = document.querySelectorAll('#tour-grid .card');
 
-  if (!destination || !duration || !price || cards.length === 0) return;
+  if (!destination || !duration || !price || cards.length === 0) {
+    console.warn('Tour filters are not initialized: expected #destination, #duration, #price and #tour-grid cards.');
+    return;
+  }
 
   const runFilter = () => {
     cards.forEach((card) => {
