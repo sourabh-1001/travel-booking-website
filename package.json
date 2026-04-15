@@ -1,0 +1,9 @@
+{
+  "name": "sumit-rajasthan-travel-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Premium travel booking website for Sumit Rajasthan Travel",
+  "scripts": {
+    "lint:php": "find php admin -name '*.php' -print0 | xargs -0 -n1 php -l"
+  }
+}

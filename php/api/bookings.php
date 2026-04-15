@@ -6,6 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 require_post_csrf();
+enforce_rate_limit('bookings_' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'), 300, 8);
 
 if (isset($_POST['contact'])) {
     $name = trim($_POST['contact_name'] ?? '');
@@ -24,13 +25,16 @@ if (isset($_POST['contact'])) {
 
 $name = trim($_POST['name'] ?? '');
 $email = trim($_POST['email'] ?? '');
+$phone = trim($_POST['phone'] ?? '');
 $tour = trim($_POST['tour'] ?? '');
 $travelDate = $_POST['travel_date'] ?? '';
 $guests = (int) ($_POST['guests'] ?? 0);
+$price = (float) ($_POST['price'] ?? 0);
 
 if (
     $name === '' ||
     !filter_var($email, FILTER_VALIDATE_EMAIL) ||
+    $phone === '' ||
     $tour === '' ||
     $guests < 1
 ) {
@@ -44,7 +48,7 @@ if ($tourCount < 1) {
     json_response(['error' => 'Selected tour is not available'], 422);
 }
 
-$stmt = db()->prepare('INSERT INTO bookings (customer_name, customer_email, tour_name, guests, travel_date, status) VALUES (?, ?, ?, ?, ?, ?)');
-$stmt->execute([$name, $email, $tour, $guests, $travelDate ?: null, 'pending']);
+$stmt = db()->prepare('INSERT INTO bookings (customer_name, customer_email, phone, tour_name, guests, travel_date, status, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+$stmt->execute([$name, $email, $phone, $tour, $guests, $travelDate ?: null, 'pending', $price > 0 ? $price : null]);
 
 json_response(['message' => 'Booking request submitted']);

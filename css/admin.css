@@ -1,0 +1,5 @@
+body { font-family: "Poppins", Arial, sans-serif; background: #f5f7fb; color: #1f2937; }
+h1 { color: #1a3a52; margin-bottom: .5rem; }
+.admin-card { background: #fff; border-radius: 12px; padding: 1rem; box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+.admin-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); }
+.metric { border-left: 4px solid #d4af37; padding-left: .75rem; }

@@ -22,7 +22,26 @@ if ($perPage > 100) {
 }
 $offset = ($page - 1) * $perPage;
 
-$stmt = db()->prepare('SELECT * FROM tours ORDER BY id DESC LIMIT :limit OFFSET :offset');
+$conditions = [];
+$params = [];
+
+$category = trim((string) ($_GET['category'] ?? ''));
+if ($category !== '') {
+    $conditions[] = 'category = :category';
+    $params[':category'] = $category;
+}
+
+$destination = trim((string) ($_GET['destination'] ?? ''));
+if ($destination !== '') {
+    $conditions[] = 'destination = :destination';
+    $params[':destination'] = $destination;
+}
+
+$where = $conditions ? ('WHERE ' . implode(' AND ', $conditions)) : '';
+$stmt = db()->prepare("SELECT * FROM tours $where ORDER BY id DESC LIMIT :limit OFFSET :offset");
+foreach ($params as $key => $value) {
+    $stmt->bindValue($key, $value, PDO::PARAM_STR);
+}
 $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
 $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
